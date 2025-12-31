@@ -100,69 +100,112 @@ export const Hero = ({ onGetStarted }: HeroProps) => {
 
 
           {/* Feature highlights */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-16">
+           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-16">
 
-            <a
-              href="https://beveragekingct.com/shop/?tags=single%20barrels"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border 
-                         hover:border-primary/50 transition-all h-full min-h-[280px] 
-                         flex flex-col cursor-pointer hover:shadow-lg"
-            >
-              <Crown className="w-12 h-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-center">Single Barrels</h3>
-              <p className="text-muted-foreground text-center">
-                Single barrels offer a uniquely crafted expression, showcasing the distinct character drawn from just one exceptional cask.
-              </p>
-            </a>
+  {/* Single Barrels */}
+  <a
+    href="https://beveragekingct.com/shop/?tags=single%20barrels"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="relative h-[320px] rounded-xl overflow-hidden group cursor-pointer"
+  >
+    {/* Background Image */}
+    <img
+      src="https://res.cloudinary.com/disrdtslz/image/upload/v1767145118/single_bzmsjh.jpg"
+      alt="Single Barrels"
+      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
 
-            <a
-              href="https://beveragekingct.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border 
-                         hover:border-primary/50 transition-all h-full min-h-[280px] 
-                         flex flex-col cursor-pointer hover:shadow-lg"
-            >
-              <Bell className="w-12 h-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-center">Special Releases</h3>
-              <p className="text-muted-foreground text-center">
-                First looks at limited bottles and rare finds.
-              </p>
-            </a>
+    {/* Dark Overlay */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10" />
 
-            <a
-              href="https://beveragekingct.com/shop/?category=our_new_arrivals&title=New%20Arrivals"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border 
-                         hover:border-primary/50 transition-all h-full min-h-[280px] 
-                         flex flex-col cursor-pointer hover:shadow-lg"
-            >
-              <Sparkles className="w-12 h-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-center">New Arrivals</h3>
-              <p className="text-muted-foreground text-center">
-                New arrivals bring fresh, exciting selections that highlight the latest additions.
-              </p>
-            </a>
+    {/* Content */}
+   <div className="relative z-10 h-full flex flex-col items-start justify-end text-left p-6 pb-8 text-white">
 
-            <a
-              href="https://beveragekingct.com/events"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border 
-                         hover:border-primary/50 transition-all h-full min-h-[280px] 
-                         flex flex-col cursor-pointer hover:shadow-lg"
-            >
-              <GlassWater className="w-12 h-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-center">Tasting & Events</h3>
-              <p className="text-muted-foreground text-center">
-                Tasting & Events provide immersive experiences that let you explore flavors and connect with experts.
-              </p>
-            </a>
+     
+      <h3 className="text-2xl font-semibold mb-2">Single Barrels</h3>
+      <p className="text-sm text-white/90 max-w-xs">
+        Uniquely crafted expressions drawn from one exceptional cask.
+      </p>
+    </div>
+  </a>
 
-          </div>
+  {/* Special Releases */}
+  <a
+    href="https://beveragekingct.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="relative h-[320px] rounded-xl overflow-hidden group cursor-pointer"
+  >
+    <img
+      src="https://res.cloudinary.com/disrdtslz/image/upload/v1767205935/Screenshot_31-12-2025_133144_liquorstars.com_kz20fx.jpg"
+      alt="Special Releases"
+      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+
+    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10" />
+
+   <div className="relative z-10 h-full flex flex-col items-start justify-end text-left p-6 pb-8 text-white">
+
+      
+      <h3 className="text-2xl font-semibold mb-2">Special Releases</h3>
+      <p className="text-sm text-white/90 max-w-xs">
+        Limited bottles and rare finds, available while they last.
+      </p>
+    </div>
+  </a>
+
+  {/* New Arrivals */}
+  <a
+    href="https://beveragekingct.com/shop/?category=our_new_arrivals&title=New%20Arrivals"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="relative h-[320px] rounded-xl overflow-hidden group cursor-pointer"
+  >
+    <img
+      src="https://res.cloudinary.com/disrdtslz/image/upload/v1767206256/Screenshot_31-12-2025_133723_www.thebarreltap.com_fzbmwo.jpg"
+      alt="New Arrivals"
+      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+
+    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10" />
+
+    <div className="relative z-10 h-full flex flex-col items-start justify-end text-left p-6 pb-8 text-white">
+
+      
+      <h3 className="text-2xl font-semibold mb-2">New Arrivals</h3>
+      <p className="text-sm text-white/90 max-w-xs">
+        Fresh selections showcasing the latest additions.
+      </p>
+    </div>
+  </a>
+
+  {/* Tasting & Events */}
+  <a
+    href="https://beveragekingct.com/events"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="relative h-[320px] rounded-xl overflow-hidden group cursor-pointer"
+  >
+    <img
+      src="https://res.cloudinary.com/disrdtslz/image/upload/v1767145690/Screenshot_30-12-2025_204759_www.bing.com_ngpvcx.jpg"
+      alt="Tasting & Events"
+      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+
+    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10" />
+
+    <div className="relative z-10 h-full flex flex-col items-start justify-end text-left p-6 pb-8 text-white">
+     
+      <h3 className="text-2xl font-semibold mb-2">Tasting & Events</h3>
+      <p className="text-sm text-white/90 max-w-xs">
+        Immersive tastings and events guided by experts.
+      </p>
+    </div>
+  </a>
+
+</div>
+
 
           {/* Instagram section */}
           <div className="mt-16 -mb-5 flex flex-col items-center text-center">
@@ -177,6 +220,7 @@ export const Hero = ({ onGetStarted }: HeroProps) => {
               <span>Follow us on Instagram for all the latest details!</span>
             </a>
           </div>
+
 
 
         </div>
