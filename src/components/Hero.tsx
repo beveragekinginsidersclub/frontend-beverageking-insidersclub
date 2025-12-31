@@ -1,21 +1,146 @@
 import { Button } from "@/components/ui/button";
 import { Crown, Sparkles, Bell, Instagram, GlassWater } from "lucide-react";
 import bkLogo from "@/assets/bk-logo.jpg";
+import "./Hero.css";
 import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 
 interface HeroProps {
   onGetStarted: () => void;
 }
 
 export const Hero = ({ onGetStarted }: HeroProps) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [videoSources, setVideoSources] = useState<Array<{ src: string; type: string }>>([]);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 600px)");
+    const orientationMq = window.matchMedia("(orientation: portrait)");
+    let mounted = true;
+
+    const headExists = async (url: string) => {
+      try {
+        const res = await fetch(url, { method: "HEAD" });
+        return res && res.ok;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    const update = async () => {
+      const isMobile = mq.matches;
+      const isPortrait = orientationMq.matches;
+
+      // If portrait mobile, prefer a vertical mobile file if it exists
+      if (isMobile && isPortrait) {
+        const vMp4 = "/videos/hero-background-mobile-vertical.mp4";
+        const vWebm = "/videos/hero-background-mobile-vertical.webm";
+        if (await headExists(vMp4)) {
+          if (!mounted) return;
+          setVideoSources([{ src: vMp4, type: "video/mp4" }]);
+          return;
+        }
+        if (await headExists(vWebm)) {
+          if (!mounted) return;
+          setVideoSources([{ src: vWebm, type: "video/webm" }]);
+          return;
+        }
+      }
+
+      // Fallback: select mobile or desktop sources as before
+      if (isMobile) {
+        if (!mounted) return;
+        setVideoSources([
+          { src: "/videos/hero-background-mobile.webm", type: "video/webm" },
+          { src: "/videos/hero-background-mobile.mp4", type: "video/mp4" },
+        ]);
+      } else {
+        if (!mounted) return;
+        setVideoSources([
+          { src: "/videos/hero-background-desktop.webm", type: "video/webm" },
+          { src: "/videos/hero-background-desktop.mp4", type: "video/mp4" },
+          { src: "/videos/Dec_31__1410_16s_202512311424_nv6f2.mp4", type: "video/mp4" },
+        ]);
+      }
+    };
+
+    // Call update and listen for changes in width and orientation
+    update();
+    const handler = () => { update(); };
+    if (mq.addEventListener) mq.addEventListener("change", handler);
+    else mq.addListener(handler);
+    if (orientationMq.addEventListener) orientationMq.addEventListener("change", handler);
+    else orientationMq.addListener(handler);
+
+    return () => {
+      mounted = false;
+      if (mq.removeEventListener) mq.removeEventListener("change", handler);
+      else mq.removeListener(handler);
+      if (orientationMq.removeEventListener) orientationMq.removeEventListener("change", handler);
+      else orientationMq.removeListener(handler);
+    };
+  }, []);
+
+  // Attempt to autoplay when possible and handle errors silently
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const tryPlay = async () => {
+      if (v && !v.paused && !v.ended) return;
+      try {
+        await v.play();
+      } catch (e) {
+        // autoplay blocked or other error - leave poster visible
+      }
+    };
+
+    // Try playing once sources are set
+    if (videoSources.length > 0) tryPlay();
+  }, [videoSources]);
+
+  // Respect reduced-motion preference
+  const prefersReducedMotion = typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="flex flex-col">
 
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,hsl(var(--primary)/0.1),transparent)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,hsl(var(--secondary)/0.3),transparent)]" />
+      {/* Top video block */}
+      <div className="w-full h-screen overflow-hidden bg-black hero-video-container flex items-center justify-center">
+        <video
+          ref={videoRef}
+          // Full-bleed video that stays in the document flow
+          className={`w-auto h-full object-contain object-center z-0 filter contrast-105 saturate-105 transition-opacity duration-700 ease-out ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+          poster="/images/hero-poster.svg"
+          muted
+          autoPlay={!prefersReducedMotion}
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          role="img"
+          onCanPlay={() => setVideoLoaded(true)}
+          onError={() => setVideoLoaded(false)}
+          onClick={() => {
+            // allow tapping to toggle play/pause (useful on mobile if autoplay is blocked)
+            const v = videoRef.current;
+            if (!v) return;
+            if (v.paused) v.play();
+            else v.pause();
+          }}
+        >
+          {videoSources.map((s) => (
+            <source key={s.src} src={s.src} type={s.type} />
+          ))}
+          {/* Safe fallback */}
+          <source src="/videos/Dec_31__1410_16s_202512311424_nv6f2.mp4" type="video/mp4" />
+        </video>
+      </div>
 
-      <div className="container relative z-10 px-4 py-20 mx-auto">
+      {/* Text/content below the video */}
+      <div className="container relative z-20 px-4 py-12 mx-auto">
         <div className="max-w-4xl mx-auto text-center">
 
           {/* Logo */}
@@ -28,20 +153,21 @@ export const Hero = ({ onGetStarted }: HeroProps) => {
           </div>
 
           {/* Main heading */}
-          <h1 className="mb-8 text-4xl md:text-6xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient">
+          <h1 className="mb-8 text-4xl md:text-6xl font-bold tracking-tight text-white drop-shadow-2xl">
+            <span className="hidden md:inline bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient">
               Insiders Club
             </span>
+            <span className="md:hidden">Insiders Club</span>
           </h1>
 
           {/* Subheading */}
-          <p className="mb-10 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="mb-10 text-lg md:text-xl text-black/95 max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
             This isn't your typical rewards or loyalty program — no points, no punches, no complicated rules.
             We're not asking you to prove your loyalty. All we're asking is that you show up, sign up, and get in on the good stuff before anyone else.
           </p>
 
           {/* VIP Message */}
-          <p className="mb-10 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="mb-10 text-lg md:text-xl text-black/95 max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
             Get exclusive early access to barrel drops, first looks at special releases, and behind-the-scenes updates
             on what we're working on. This is your VIP pass to everything happening at the crown jewel of spirits.
           </p>
