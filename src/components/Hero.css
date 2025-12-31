@@ -1,0 +1,7 @@
+.hero-video-container {
+  background-color: #000; /* dark fallback while video loads */
+  background-image: url('/images/hero-poster.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
